@@ -1,4 +1,4 @@
-### Dashboard  Tlaplan Facebook Repositorio
+### Dashboard Analisis Facebook Repositorio
 
-##### usuario: qsntlaplan
-##### pass: qsntlaplan2024
+##### usuario: qsnanalisis
+##### pass: qsnanalisis2024
