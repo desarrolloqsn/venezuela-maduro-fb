@@ -1,35 +1,62 @@
-/** @format */
+import { Modal, Table, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import './Carta.css'
+import { useSelector } from 'react-redux';
+import { Rate } from 'antd';
+import { useLocation } from 'react-router';
+import {HiDocumentDownload} from 'react-icons/hi'
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { Button, Tooltip } from 'antd';
+import { Link } from 'react-router-dom';
+import user from './../../imagenes/user.webp'
+import maduro from './../../imagenes/maduro.jpg'
+import delcy from './../../imagenes/delcy.jpg'
+import mippci from './../../imagenes/mippci.jpg'
+import presidencia from './../../imagenes/presidencia.jpg'
 
-import { Table, Tag } from "antd";
-import React, { useEffect, useState } from "react";
-import perfil from "./../../imagenes/user.webp";
-import "./Carta.css";
-import { useSelector } from "react-redux";
-import { Rate } from "antd";
-import { useLocation } from "react-router";
-import { HiDocumentDownload } from "react-icons/hi";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
-import { Button, Tooltip } from "antd";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { Spin } from 'antd';
 
-export default function TablaTweets() {
+export default function TablaTweets(){
   const datatweets = useSelector((state) => state.datosFiltrados);
   const location = useLocation();
-  const [Top10MasRetwitteadosConBases64,setTop10MasRetwitteadosConBases64] = useState([])
-  const [cargandoImagenes, setCargandoImagenes] = useState(true);
   const currentUrl = location.pathname;
-  const subUrl = currentUrl.startsWith("/dashboard/")
-    ? currentUrl.substring("/dashboard/".length)
-    : "";
+  const subUrl = currentUrl.startsWith('/dashboard/') ? currentUrl.substring('/dashboard/'.length) : '';
   const modeloSinEspacios = decodeURIComponent(subUrl.replace(/\+/g, " "));
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentComments, setCurrentComments] = useState([]);
 
-  const tweetsFiltrados = datatweets.filter((tweet) => {
+  const openModal = (comments) => {
+    setCurrentComments(comments);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setCurrentComments([]);
+  };
+  const tweetsFiltrados = datatweets.filter(tweet => {
     const propiedadModelo = tweet[modeloSinEspacios];
     return Array.isArray(propiedadModelo) && propiedadModelo.length > 0;
   });
+
+ // Objeto de mapeo para agrupar por la propiedad link
+const linkMap = {};
+
+// Iterar a través de los objetos en datatweets
+for (const obj of datatweets) {
+  const link = obj.link;
+  if (!linkMap[link]) {
+    linkMap[link] = [];
+  }
+  linkMap[link].push(obj);
+}
+
+// Crear un array de arrays basado en el mapeo
+const groupedArrays = Object.values(linkMap);
+let array = groupedArrays
+.slice(0,10)
+.sort((a, b) => b.length - a.length);
+console.log("GRUPOS ARRAY",array);
 
   const decodeText = (text) => {
     try {
@@ -39,327 +66,319 @@ export default function TablaTweets() {
     }
   };
 
-  // Paso 1: Iterar sobre cada objeto en el array
-  datatweets.forEach((tweet) => {
-    // Paso 2: Sumar las propiedades "citas", "retweets", "likes", "comentarios" y "vistas"
-    const { citas, retweets, likes, comentarios } = tweet;
-    const totalInteracciones = citas + retweets + likes + comentarios;
 
-    // Paso 3: Almacenar la suma en una nueva propiedad del objeto
-    tweet.totalInteracciones = totalInteracciones;
+
+
+// Paso 1: Iterar sobre cada objeto en el array
+datatweets.forEach(tweet => {
+  // Paso 2: Sumar las propiedades "citas", "retweets", "likes", "comentarios" y "vistas"
+  const { citas, retweets, likes, comentarios } = tweet;
+  const totalInteracciones = citas + retweets + likes + comentarios;
+
+  // Paso 3: Almacenar la suma en una nueva propiedad del objeto
+  tweet.totalInteracciones = totalInteracciones;
+});
+
+// Paso 4: Ordenar el array de objetos en base a la propiedad "totalInteracciones" de forma descendente
+const tweetsNuevo = datatweets.sort((a, b) => b.totalInteracciones - a.totalInteracciones);
+const top10MasRetwitteados = tweetsNuevo.slice(0,10)
+// Filtrar los objetos con Tipo === "Post"
+const postsTop10 = top10MasRetwitteados.slice(0, 10).filter(tweet => tweet.Tipo === "Post");
+
+ 
+  //  console.log("TWEETS",tweetsNuevo.slice(0,100));
+  
+const data = [
+  {
+    key: '1',
+    Tweets: 'Some tweet',
+  },
+  // ...otros datos
+];
+const [showVideo, setShowVideo] = useState(true);
+
+const handleVideoError = () => {
+  setShowVideo(false);
+};
+
+useEffect(()=>{
+
+},[showVideo])
+
+
+
+const columns = [
+  {
+    title: 'Eventos',
+    dataIndex: 'Tweets',
+    width: '50%',
+    render: (_, record) => (
+      array.map((item,key)=> (
+
+  <div key={key}>
+    <div className='contenedor-tweets'>
+          
+    <div className='user-twitter'>{item[0].fecha}</div>    
+    <br></br>
+     <div className='foto-texto-perfil'>
+            <div className='contenedor-perfil'>
+                <img
+                 src={item[0].usuarioOriginal === 'NicolasMaduro'
+                   ? maduro
+                   : item[0].usuarioOriginal === 'MIPPCIVzla'
+                   ? mippci
+                   : item[0].usuarioOriginal === 'DespachoPresidencia'
+                   ? presidencia
+                   : item[0].usuarioOriginal === 'delcyrodriguezv'
+                   ? delcy
+                   : item[0].profileImage === "" ? user
+                   : item[0].profileImage} 
+                 className='fotoperfil-fb'
+                 
+                 alt='Foto de perfil'
+               />
+             </div>
+             
+             <div className='contenedor-publicacion'>
+             <Link to={item[0].link} target="_blank">
+               <div className='contenedor-tituloSubtitulo'>
+              
+                 <div className='user-twitter'>{item[0].usuarioOriginal}</div>
+                           
+                  
+                 </div>
+                
+                <div>{decodeText(item[0].texto)}</div>
+               {/* Texto */}
+               {item[0].imagen_tweet !== "" && item[0].imagen_tweet.length > 0 ? (
+                 <div>
+                   {item[0].imagen_tweet.map((elemento, index) => {
+                     if (elemento.startsWith('https://video')) {
+                       return (
+                         <video key={index} src={elemento} controls  className='publicacion'/>
+               
+                       );
+                     } else {
+                       return (
+                         <img
+                           key={index}
+                           src={elemento}
+                           className='publicacion'
+                           alt='Imagen de la publicación'
+                         />
+                       );
+                     }
+                   })}
+       
+                 </div>
+               ) : null}
+               
+             {item[0].name_author_tweet_citado ?
+                       <div className='contendor-tweets citado'>
+                          <div className='user-twitter'>{item[0].fecha_tweet_citado}</div>  
+                           <div className='contenedor-publicacion'>
+                             <div className='contenedor-tituloSubtitulo'>
+                               <div className='titulo-tweet'>{item[0].name_author_tweet_citado}</div>
+                               <div className='user-twitter'>{item[0].usuarioOriginal_tweet_citado}</div>
+                                         
+                            
+                               </div>
+                               </div>
+                         <div>{decodeText(item[0].texto_tweet_citado)}</div>
+                        
+                       </div>
+                       : null}
+                       
+               <div className='tags'> 
+                 <Tag
+                   key={key}
+                   style={{marginBottom:"0.5rem"}}
+                   color={
+                     item[0].sentimiento === 'neutro'
+                       ? 'grey'
+                       : item[0].sentimiento === 'positivo'
+                       ? '#008300'
+                       : '#ff2323'
+                   }
+                 >
+                   {item[0].sentimiento.toUpperCase()}
+                 </Tag>
+               
+                    {modeloSinEspacios !== null ? null :
+                 <div>
+                 {item[0][modeloSinEspacios].map((tag, index) => (
+                   <Tag style={{marginBottom:"0.5rem"}} key={index} color='blue'>{tag}</Tag>
+                 ))}
+                 </div>
+               }
+               </div>
+
+               
+               <Rate allowHalf disabled defaultValue={item[0].totalInteracciones / top10MasRetwitteados[0].totalInteracciones * 5}  character={<span style={{ fontSize: '18px' }}>★</span>} />
+
+                </Link>   
+                <div className='contenedor-comentarios'>
+          
+          {item.slice(1, 6).map((unReadObj, index) => (
+            <div className='comentariofb ' key={index}> 
+            <div className='contenedor-perfilfb'>
+            <img
+             src={unReadObj.usuarioOriginal === 'NicolasMaduro'
+               ? maduro
+               :unReadObj.usuarioOriginal === 'MIPPCIVzla'
+               ? mippci
+               :unReadObj.usuarioOriginal === 'DespachoPresidencia'
+               ? presidencia
+               :unReadObj.usuarioOriginal === 'delcyrodriguezv'
+               ? delcy
+               :unReadObj.profileImage} 
+             className='fotoperfil-fb'
+             alt='Foto de perfil'
+           />
+           </div>
+           <div className='citado contenedor-publicacionfb comentario-facebook'>
+           <div className='user-fb'>{unReadObj.usuarioOriginal}</div>
+            <div>{unReadObj.texto}</div>
+            <div className='tags'> 
+                 <Tag
+                   key={key}
+                   style={{marginBottom:"0.2rem", fontSize:"10px"}}
+                   color={
+                    unReadObj.sentimiento === 'neutro'
+                       ? 'grey'
+                       : unReadObj.sentimiento === 'positivo'
+                       ? '#008300'
+                       : '#ff2323'
+                   }
+                 >
+                   {unReadObj.sentimiento.toUpperCase()}
+                 </Tag>
+               </div>
+           </div>
+         </div>
+          ))}
+           {item.length > 6 && (
+        <Button type='link' onClick={() => openModal(item.slice(1))}>
+          Ver más comentarios
+        </Button>
+      )}
+
+      </div>
+             </div>
+           </div>
+         </div>
+        </div>
+        
+     ))
+    )
+  }
+];
+
+
+
+const convertirArraysACadenas = (data) => {
+  const newData = { ...data };
+  for (const key in newData) {
+    if (Array.isArray(newData[key])) {
+      newData[key] = newData[key].join(', ');
+    }
+  }
+  return newData;
+};
+
+const handleDownloadExcel = () => {
+  const excelData = groupedArrays.flatMap((array) => {
+    return array.map((obj) => {
+      const newData = { ...obj };
+      for (const key in newData) {
+        if (Array.isArray(newData[key])) {
+          newData[key] = newData[key].join(', ');
+        }
+      }
+      return newData;
+    });
   });
 
-  // Paso 4: Ordenar el array de objetos en base a la propiedad "totalInteracciones" de forma descendente
-  const tweetsNuevo = datatweets.sort(
-    (a, b) => b.totalInteracciones - a.totalInteracciones
-  );
-  const top10MasRetwitteados = tweetsNuevo.slice(0,20);
+  const worksheet = XLSX.utils.json_to_sheet(excelData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-  //  console.log("TWEETS",tweetsNuevo.slice(0,100));
+  const today = new Date();
+  const date = today.toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
-  const data = [
-    {
-      key: "1",
-      Tweets: "Some tweet",
-    },
-    // ...otros datos
-  ];
+  const fileName = `Eventos_${date}.xlsx`;
 
-  // const obtenerImagenes = async (url) => {
-  //   try {
-  //     const response = await axios.post(`http://192.168.1.75:3002/generateBase64`, {
-  //       url: url
-  //     });
-  //     return response.data.bases64;
-  //   } catch (error) {
-  //     console.error(error);
-  //     return [];
-  //   }
-  // }
+  saveAs(data, fileName);
+};
 
-
-
-  // // Cambia tu render a un useEffect para hacer las solicitudes antes del renderizado
-  // useEffect(() => {
-  //   const obtenerImagenesParaTopRetweets = async () => {
-  //     try {
-  //       const nuevasTopRetweets = await Promise.all(
-  //         top10MasRetwitteados.map(async (item) => {
-  //           const bases64 =
-  //             item.imagen_tweet !== null
-  //               ? await obtenerImagenes(item.imagen_tweet)
-  //               : null;
-  //           return { ...item, bases64 };
-  //         })
-  //       );
-    
-  //       setTop10MasRetwitteadosConBases64(nuevasTopRetweets);
-  //       setCargandoImagenes(false); // Indicamos que las imágenes han terminado de cargar
-  //     } catch (error) {
-  //       console.error(error);
-  //       setCargandoImagenes(false); // Manejo de errores: indicamos que las imágenes han terminado de cargar
-  //     }
-  //   };
-  //   obtenerImagenesParaTopRetweets()
-  // }, []);
-
-  const [loading, setLoading] = useState(false);
-
-  const [imagenesCargadas, setImagenesCargadas] = useState({});
-  const obtenerImagenes = (url) => {
-    // console.log(url)
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await axios.post(`https://vps-3578916-x.dattaweb.com/generateBase64`, {
-          url:url
-        });
-        resolve(response.data.msj);
-      } catch (error) {
-        console.error(error);
-        reject(error);
-      }
-    });
-  }
-
-  useEffect(() => {
-    top10MasRetwitteados.forEach(async (item) => {
-      await handleLazyLoad(item);
-    });
-  }, []);
-  const handleLazyLoad = async (item) => {
-    // console.log(item)
-    if (item.imagen_tweet && !imagenesCargadas[item.imagen_tweet]) {
-      
-      try {
-        setLoading(true); // Indicar que la imagen está cargando
-        const bases64 = await obtenerImagenes(item.imagen_tweet);
-        // console.log(bases64)
-        setImagenesCargadas(prev => ({
-          ...prev,
-          [item.imagen_tweet]: bases64
-        }));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false); // Indicar que la carga ha terminado
-      }
-    }
-  }
-
-
-  const columns = [
-    {
-      title: "Eventos",
-      dataIndex: "Tweets",
-      width: "50%",
-
-      render: (_, record) =>
-      top10MasRetwitteados.map((item, index) => {
-          const bases64 = item.bases64;
-          // console.log(imagenesCargadas)
-
-
-        
-            return (
-              <Link to={item.link} target="_blank" key={index}>
-                <div  key={index}
-                className="lazyload-container"
-                style={{ minHeight: "200px" }} // Ajusta la altura mínima según tu diseño
->
-                  <div className="contendor-tweets">
-                    {/* CONTENEDOR GENERAL */}
-                    <div className="user-twitter">{item.fecha}</div>
-                    <br></br>
-                    <div className="foto-texto-perfil">
-                      {/* CONTENEDOR foto y texto vertical */}
-                      {/* <div className='contenedor-perfil'>
-                 CONTENEDOR FOTO PERFIL 
-                <img
-                  src={item.profileImage || perfil}
-                  className='fotoperfil'
-                  alt='Foto de perfil'
-                />
-              </div>*/}
-
-                      <div className="contenedor-publicacion">
-                        {/* CONTENEDOR TEXTO */}
-                        <div className="contenedor-tituloSubtitulo">
-                          {/* <div className='titulo-tweet'>{item.name}</div> */}
-                          {/* Título */}
-                          <div className="user-twitter">
-                            {item.usuarioOriginal}
-                          </div>
-                        </div>
-                        {/* Mapeo de usuarios categorizadores */}
-                        {item.usuarioCategorizador_Comments.length > 0 && (
-                          <div>
-                            <div>Replying to</div>
-                            <div className="replyingto">
-                              {item.usuarioCategorizador_Comments
-                                .map((usuario, index) => `${usuario}`)
-                                .join(" ")}
-                            </div>
-                          </div>
-                        )}
-                        <div>{decodeText(item.texto)}</div>
-                        {/* Texto */}
-                        {item.imagen_tweet &&
-                              item.imagen_tweet.map((url, idx) => {
-                                const bases64 = imagenesCargadas[url];
-
-                                // Aquí está la lógica del temporizador
-                                let timer;
-                                if (!bases64 && loading) {
-                                  timer = setTimeout(() => {
-                                    setLoading(false); // Desactivar la carga después de 30 segundos
-                                  }, 30000); // 30 segundos en milisegundos
-                                }
-
-                              return (
-                                <div key={idx} className="imagen-container">
-                                  { !bases64 || loading  && <Spin className="spin-base64"/>} {/* Indicador de carga */}
-                                  {bases64 &&
-                                    bases64.map((data, idx2) => {
-                                      if (data.Url.includes(".mp4")) {
-                                        return (
-                                          <video
-                                            key={idx2}
-                                            src={`data:video/mp4;base64,${data.Base64}`}
-                                            className="publicacion"
-                                            controls
-                                            crossOrigin="anonymous"
-                                          />
-                                        );
-                                      } else {
-                                        return (
-                                          <img
-                                            key={idx2}
-                                            src={`data:image/jpeg;base64,${data.Base64}`}
-                                            className="publicacion"
-                                            alt="Imagen de la publicación"
-                                            crossOrigin="anonymous"
-                                          />
-                                        );
-                                      }
-                                    })}
-                                </div>
-                              );
-                            })}
-
-                         <div className="tags">
-                          {/* CONTENEDOR tags */}
-                          <Tag
-                            key={index}
-                            style={{ marginBottom: "0.5rem" }}
-                            color={
-                              item.sentimiento === "neutro"
-                                ? "grey"
-                                : item.sentimiento === "positivo"
-                                ? "#008300"
-                                : "#ff2323"
-                            }
-                          >
-                            {item.sentimiento.toUpperCase()}
-                          </Tag>
-                          {/* {item.tags.map((tag, index) => (
-                    <Tag style={{marginBottom:"0.5rem"}} key={index} color='blue'>{tag}</Tag>
-                  ))} */}
-                          {modeloSinEspacios !== null ? null : (
-                            <div>
-                              {item[modeloSinEspacios].map((tag, index) => (
-                                <Tag
-                                  style={{ marginBottom: "0.5rem" }}
-                                  key={index}
-                                  color="blue"
-                                >
-                                  {tag}
-                                </Tag>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <Rate
-                          allowHalf
-                          disabled
-                          defaultValue={
-                            (item.totalInteracciones /
-                              top10MasRetwitteados[0].totalInteracciones) *
-                            5
-                          }
-                          character={
-                            <span style={{ fontSize: "18px" }}>★</span>
-                          }
-                        />
-                        {/* <div className='retweets'>{item.retweets} retweets</div>  */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-        }),
-    },
-  ];
-
-  const convertirArraysACadenas = (data) => {
-    const newData = { ...data };
-    for (const key in newData) {
-      if (Array.isArray(newData[key])) {
-        newData[key] = newData[key].join(", ");
-      }
-    }
-    return newData;
-  };
-  const handleDownloadExcel = () => {
-    const datosConvertidos = datatweets.map(convertirArraysACadenas);
-    const worksheet = XLSX.utils.json_to_sheet(datosConvertidos, {
-      header: Object.keys(datosConvertidos[0]),
-    });
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Datos");
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-    const data = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-
-    // Obtener la fecha actual
-    const today = new Date();
-    const date = today.toISOString().split("T")[0]; // Formato YYYY-MM-DD
-
-    // Nombre del archivo con la fecha actual
-    const fileName = `Eventos_${date}.xlsx`;
-
-    saveAs(data, fileName);
-  };
-
-  return (
+  return(
     <div>
-      <div className="titulo-carta">Categorización</div>
-
-      <div className="subtitulo-carta">
+    <div className='titulo-carta'>Categorización</div>
+   
+    <div className='subtitulo-carta'>
         <div>Eventos con más engagements</div>
         <Tooltip title="Descargar Excel">
-          <Button
-            onClick={handleDownloadExcel}
-            type="primary"
-            shape="circle"
-            className="subtitulo-boton"
-          >
-            <HiDocumentDownload />
-          </Button>
+        <Button onClick={handleDownloadExcel} type="primary" shape="circle"  className='subtitulo-boton'><HiDocumentDownload/></Button>
         </Tooltip>
       </div>
-      <div className="carta">
-      <Table
-        columns={columns}
-        dataSource={data}
-        scroll={{ y: 348 }}
-        pagination={false}
-      />
-  </div>
+    <div className='carta'>
+      <Table columns={columns} dataSource={data} scroll={{ y: 348 }} pagination={false}/>
     </div>
-  );
+     <Modal
+  visible={modalVisible}
+  onCancel={closeModal}
+  footer={null}
+ 
+  bodyStyle={{ maxHeight: '80vh', overflowY: 'auto' }} 
+>
+      <div>
+        {currentComments.map((unReadObj, index) => (
+           <Link to={unReadObj.link} target="_blank">
+           <div className='contenedor-comentarios'>
+             <div className='comentariofb ' key={index}> 
+             <div className='contenedor-profile'>
+             <img
+              src={unReadObj.usuarioOriginal === 'NicolasMaduro'
+                ? maduro
+                :unReadObj.usuarioOriginal === 'MIPPCIVzla'
+                ? mippci
+                :unReadObj.usuarioOriginal === 'DespachoPresidencia'
+                ? presidencia
+                :unReadObj.usuarioOriginal === 'delcyrodriguezv'
+                ? delcy
+                :unReadObj.profileImage} 
+              className='fotoperfil'
+              alt='Foto de perfil'
+            />
+            </div>
+            <div className='citado-contenedor-comentario-facebook'>
+            <div className='user-fb'>{unReadObj.usuarioOriginal}</div>
+             <div>{unReadObj.texto}</div>
+             <div className='tags'> 
+                  <Tag
+                    key={index}
+                    style={{marginBottom:"0.2rem", fontSize:"10px"}}
+                    color={
+                     unReadObj.sentimiento === 'neutro'
+                        ? 'grey'
+                        : unReadObj.sentimiento === 'positivo'
+                        ? '#008300'
+                        : '#ff2323'
+                    }
+                  >
+                    {unReadObj.sentimiento.toUpperCase()}
+                  </Tag>
+                </div>
+            </div>
+          </div>
+       </div>
+       </Link>
+        ))}
+      </div>
+      </Modal>
+    </div>
+  )
 }
+ 

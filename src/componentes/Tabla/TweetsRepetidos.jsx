@@ -9,7 +9,7 @@ import {HiDocumentDownload} from 'react-icons/hi'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { Button, Tooltip } from 'antd';
-
+import { Empty } from 'antd';
 export default function TablaTweetsRepetidos(){
   const dataTweets = useSelector((state) => state.datosFiltrados);
   const location = useLocation();
@@ -32,12 +32,73 @@ export default function TablaTweetsRepetidos(){
   };
 
 
+  // const textosUnicos = {};
+
+  // for (const tweet of dataTweets) {
+  //   const texto = tweet.texto;
+    
+  //   if (texto.trim() !== '') { // Verificar si el texto no está vacío
+  //     if (!textosUnicos.hasOwnProperty(texto)) {
+  //       textosUnicos[texto] = {
+  //         repeticiones: 1,
+  //         tweets: [tweet],
+  //       };
+  //     } else {
+  //       textosUnicos[texto].repeticiones++;
+  //       textosUnicos[texto].tweets.push(tweet);
+  //     }
+  //   }
+  // }
+  
+  // const textosOrdenados = Object.entries(textosUnicos)
+  //   .sort((a, b) => b[1].repeticiones - a[1].repeticiones);
+  
+  // const tweetsMasRepetidos = textosOrdenados.map(([texto, data]) => ({
+  //   tweet: texto,
+  //   repeticiones: data.repeticiones,
+  //   tweets: data.tweets,
+  // }));
+  
+  
+  // const primeros100TweetsMasRepetidos = [];
+  
+  // for (const objeto of tweetsMasRepetidos) {
+  //   const repeticiones = objeto.repeticiones;
+    
+  //   for (const tweet of objeto.tweets) {
+  //     if (repeticiones > 1) {
+  //       const primerTweet = { ...tweet, repeticiones };
+  //       primeros100TweetsMasRepetidos.push(primerTweet);
+  //     }
+      
+  //     if (primeros100TweetsMasRepetidos.length === 100) {
+  //       break; // Salir del bucle después de encontrar los primeros 100 tweets más repetidos
+  //     }
+  //   }
+ 
+  // }
+  
+  // const arrayDeTweets = tweetsMasRepetidos.flatMap(objeto => {
+  //   const repeticiones = objeto.repeticiones || 0;
+  //   return objeto.tweets
+  //     .filter(tweet => repeticiones > 1) // Filtrar solo los tweets con repeticiones mayores a 2
+  //     .map(tweet => {
+  //       tweet.repeticiones = repeticiones;
+  //       return tweet;
+  //     });
+  // });
+
+ 
+  
+  // const top10MasRetwitteados = primeros100TweetsMasRepetidos.slice(0, 100);
+  // console.log(top10MasRetwitteados);
+
   const textosUnicos = {};
 
   for (const tweet of dataTweets) {
     const texto = tweet.texto;
-    
-    if (texto.trim() !== '') { // Verificar si el texto no está vacío
+  
+    if (texto.trim() !== '') {
       if (!textosUnicos.hasOwnProperty(texto)) {
         textosUnicos[texto] = {
           repeticiones: 1,
@@ -53,28 +114,40 @@ export default function TablaTweetsRepetidos(){
   const textosOrdenados = Object.entries(textosUnicos)
     .sort((a, b) => b[1].repeticiones - a[1].repeticiones);
   
-  const tweetsMasRepetidos = textosOrdenados.map(([texto, data]) => ({
-    tweet: texto,
-    repeticiones: data.repeticiones,
-    tweets: data.tweets,
-  }));
-  
-  
   const primeros100TweetsMasRepetidos = [];
+  const tweetsYaAgregados = new Set(); // Usamos un Set para rastrear tweets ya agregados
   
-  for (const objeto of tweetsMasRepetidos) {
-    const primerTweet = { ...objeto.tweets[0], repeticiones: objeto.repeticiones };
-    primeros100TweetsMasRepetidos.push(primerTweet);
+  for (const objeto of textosOrdenados) {
+    const repeticiones = objeto[1].repeticiones;
+    const tweets = objeto[1].tweets;
   
-    if (primeros100TweetsMasRepetidos.length === 100) {
+    if (primeros100TweetsMasRepetidos.length >= 100) {
       break; // Salir del bucle después de encontrar los primeros 100 tweets más repetidos
+    }
+  
+    for (const tweet of tweets) {
+      if (!tweetsYaAgregados.has(tweet.texto)) {
+        const primerTweet = { ...tweet, repeticiones };
+        primeros100TweetsMasRepetidos.push(primerTweet);
+        tweetsYaAgregados.add(tweet.texto);
+        break; // Salir del bucle interno después de agregar el primer tweet del bloque
+      }
     }
   }
   
-  // console.log(primeros100TweetsMasRepetidos);
+  const arrayDeTweets = textosOrdenados.flatMap(objeto => {
+    const repeticiones = objeto[1].repeticiones || 0;
+    return objeto[1].tweets
+      .filter(tweet => repeticiones > 1)
+      .map(tweet => {
+        tweet.repeticiones = repeticiones;
+        return tweet;
+      });
+  });
   
-  const top10MasRetwitteados = primeros100TweetsMasRepetidos.slice(0, 100);
-  // console.log(top10MasRetwitteados);
+  const top10MasRetwitteados = primeros100TweetsMasRepetidos.slice(0, 10);
+
+
 const data = [
   {
     key: '1',
@@ -86,13 +159,15 @@ const data = [
 
 const columns = [
   {
-    title: 'Eventos',
+    title: 'Posteos',
     dataIndex: 'Tweets',
     width: '50%',
   
 
 
-    render: (_, record) => (
+    render: (_, record) => {
+      if (top10MasRetwitteados.length > 0) {
+        return (
       top10MasRetwitteados.map((item, index) => (
         <div key={index}>
           
@@ -102,21 +177,21 @@ const columns = [
             <br></br>
             <div className='foto-texto-perfil'>
               {/* CONTENEDOR foto y texto vertical */}
-              {/* <div className='contenedor-perfil'>
-                CONTENEDOR FOTO PERFIL
+              <div className='contenedor-perfil'>
+                {/* CONTENEDOR FOTO PERFIL */}
                 <img
                   src={item.profileImage || perfil}
                   className='fotoperfil'
                   alt='Foto de perfil'
                 />
-              </div> */}
+              </div>
               
               <div className='contenedor-publicacion'>
                 {/* CONTENEDOR TEXTO */}
                 <div className='contenedor-tituloSubtitulo'>
-                  {/* <div className='titulo-tweet'>{item.name}</div> */}
+                  <div className='titulo-tweet'>{item.name}</div>
                   {/* Título */}
-                  <div className='user-twitter'>{item.usuarioOriginal}</div>
+                  <div className='user-twitter'>@{item.usuarioOriginal}</div>
                          
                   
                   </div>
@@ -125,20 +200,33 @@ const columns = [
                     <div>
                       <div>Replying to</div>
                       <div className='replyingto'>
-                        {item.usuarioCategorizador_Comments.map((usuario, index) => `${usuario}`).join(' ')}
+                        {item.usuarioCategorizador_Comments.map((usuario, index) => `@${usuario}`).join(' ')}
                       </div>
                     </div>
                   )}
                  <div>{decodeText(item.texto)}</div>
                 {/* Texto */}
-                {/* {item.imagen_tweet !== null ? 
-                 <div>
-                 
-                  <img src={item.imagen_tweet} className='publicacion' alt='Imagen de la publicación' />
-                  
-                </div> 
-                : null
-              } */}
+                {item.imagen_tweet !== null && item.imagen_tweet.length > 0 ? (
+                  <div>
+                    {item.imagen_tweet.map((elemento, index) => {
+                      if (elemento.startsWith('https://video')) {
+                        return (
+                          <video key={index} src={elemento} controls  className='publicacion'/>
+                
+                        );
+                      } else {
+                        return (
+                          <img
+                            key={index}
+                            src={elemento}
+                            className='publicacion'
+                            alt='Imagen de la publicación'
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                ) : null}
                 {/* Imagen */}
                 <div className='tags'> 
                   {/* CONTENEDOR tags */}
@@ -179,8 +267,14 @@ const columns = [
           </div>
         </div>
       ))
-    )
+      );
+  } else {
+    return <Empty description="No hay eventos repetidos"/>;
   }
+
+      }
+      
+      }
 ];
 
 const convertirArraysACadenas = (data) => {
@@ -193,7 +287,7 @@ const convertirArraysACadenas = (data) => {
   return newData;
 };
 const handleDownloadExcel = () => {
-  const datosConvertidos = top10MasRetwitteados.map(convertirArraysACadenas);
+  const datosConvertidos = arrayDeTweets.map(convertirArraysACadenas);
   const worksheet = XLSX.utils.json_to_sheet(datosConvertidos, { header: Object.keys(datosConvertidos[0]) });
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
@@ -205,7 +299,7 @@ const handleDownloadExcel = () => {
   const date = today.toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
   // Nombre del archivo con la fecha actual
-  const fileName = `EventosRepetidos_${date}.xlsx`;
+  const fileName = `TweetsRepetidos_${date}.xlsx`;
 
   saveAs(data, fileName);
 };

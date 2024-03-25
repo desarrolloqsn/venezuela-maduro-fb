@@ -19,15 +19,6 @@ import Error404 from './contenedores/404/index.jsx';
 import { loginSuccess } from './redux/actions';
 
 
-// function PrivateRoute({ element, ...rest }) {
-//   const user = useSelector((state) => state.auth.user);
-
-//   return user ? (
-//     <Route {...rest} element={element} />
-//   ) : (
-//     <Navigate to="/" replace />
-//   );
-// }
 
 
 
@@ -261,7 +252,7 @@ function App() {
         <PrivateRoute path="/dashboard/*" element={<DashboardContainer />} />
     </Routes> */}
     
-  <Routes> 
+    <Routes> 
 
         <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
         {user && (
@@ -298,11 +289,11 @@ function DashboardContainer() {
  
   return (
     <>
-  <Nav />
+      <Nav />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/grafos" element={<DashGrafos />} />
-        {/* <Route path="/grafoComunidades" element={<GrafoComunidadesSolo />} /> */}
+        <Route path="/grafoComunidades" element={<GrafoComunidadesSolo />} />
          <Route path="/modificarcliente" element={<ModificarCliente />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/series" element={<Series />} />
@@ -314,7 +305,6 @@ function DashboardContainer() {
         {/* <Route path="/Preocupaciones - Ven" element={<DashModelo />} /> */}
         <Route path="/Red motivacional del voto" element={<DashModelo />} />
         <Route path="/Sentimientos" element={<DashModelo />} />
-        {/* <Route path="/lista" element={<DashboardLista />} /> */}
         {/* <Route path="/Voto Emocional y Racional" element={<DashModelo />} /> */}
         
       </Routes>

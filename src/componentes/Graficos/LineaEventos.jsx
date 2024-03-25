@@ -55,6 +55,7 @@ const handleModoClick = () => {
       countBySeriesAndDate = tweetsFiltrados ? tweetsFiltrados.reduce((count, tweet) => {
         const seriesNames = modo === 'serie' ? [tweet.seriesName] : tweet.subSeriesName;
         const date = tweet.date;
+        // console.log(seriesNames)
   
         seriesNames.forEach(name => {
           const seriesName = String(name);
