@@ -48,7 +48,7 @@ export default function NubePalabras() {
       fontSize: [8, 32],
       rotation: 0,
     },
-    shape: 'rectangular', // Establecer la forma como cuadrada
+    shape: 'rectangular', 
     random: () => 0.5,
   };
 
