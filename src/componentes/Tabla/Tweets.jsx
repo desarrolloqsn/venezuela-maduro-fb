@@ -115,12 +115,12 @@ const columns = [
     render: (_, record) => (
       array.map((item,key)=> (
 
-  <div key={key}>
-    <div className='contendor-tweets'>
+        <div key={key}>
+         <div className='contendor-tweets'>
           
-     
-    <br></br>
-     <div className='foto-texto-perfil'>
+           <div className='user-twitter'>{item[0].fecha}</div>    
+           <br></br>
+           <div className='foto-texto-perfil'>
             <div className='contenedor-perfil'>
                 <img
                  src={item[0].usuarioOriginal === 'NicolasMaduro'
@@ -133,20 +133,17 @@ const columns = [
                    ? delcy
                    : item[0].profileImage === "" ? user
                    : item[0].profileImage} 
-                 className='fotoperfil-fb'
-                 
+                 className='fotoperfil'
                  alt='Foto de perfil'
                />
-          
              </div>
              
              <div className='contenedor-publicacion'>
              <Link to={item[0].link} target="_blank">
                <div className='contenedor-tituloSubtitulo'>
-              
+             
                  <div className='user-twitter'>{item[0].usuarioOriginal}</div>
-                 <div className='user-twitter'>{item[0].fecha}</div>  
-
+                           
                   
                  </div>
                 
@@ -234,7 +231,7 @@ const columns = [
                :unReadObj.usuarioOriginal === 'delcyrodriguezv'
                ? delcy
                :unReadObj.profileImage} 
-             className='fotoperfil-fb'
+             className='fotoperfil'
              alt='Foto de perfil'
            />
            </div>
@@ -355,7 +352,7 @@ const handleDownloadExcel = () => {
               alt='Foto de perfil'
             />
             </div>
-            <div className='citado-contenedor-comentario-facebook'>
+            <div className='citado-contenedor-publicacionfb-comentario-facebook'>
             <div className='user-fb'>{unReadObj.usuarioOriginal}</div>
              <div>{unReadObj.texto}</div>
              <div className='tags'> 

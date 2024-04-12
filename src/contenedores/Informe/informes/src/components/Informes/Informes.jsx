@@ -6,7 +6,6 @@ import { SlNotebook } from "react-icons/sl";
 import logo from "./../../assest/qsocialnow.jpg";
 import fb from "./../../assest/fb.png";
 import tw from "./../../assest/tw.jpg";
-import ig from "./../../assest/ig.webp"
 import { AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai";
 import { CiVolumeHigh } from "react-icons/ci";
 import { Table, Tag, Input,message,Collapse, Space, Tour, InputNumber, Tooltip} from "antd";
@@ -103,8 +102,38 @@ export default function Informes() {
   }
   {/*FIN DESCARGAR PDF*/}
 
+   {/*MODAL*/}
+  const [messageApi, contextHolder] = message.useMessage();
+  const key = 'updatable';
+  const openMessage = (diapositivaName) => {
+   
+      if (!editable[diapositivaName]) {
+      messageApi.error('Primero debes editar la diapositiva');
+      return;
+    }
+  
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Cargando...',
+    });
+  
+    setEditable((prevState) => ({
+      ...prevState,
+      [diapositivaName]: !prevState[diapositivaName],
+    }));
+  
+    setTimeout(() => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Guardado!',
+        duration: 2,
+      });
+    }, 1000);
+  };
 
-       // Función para verificar si una palabra ya está en el arreglo
+      // Función para verificar si una palabra ya está en el arreglo
 function palabraRepetida(palabra, arreglo) {
   return arreglo.some(item => item.text === palabra);
 }
@@ -212,38 +241,13 @@ function obtenerPalabraSinRepetirAtributos() {
 
 
 
-   {/*MODAL*/}
-  const [messageApi, contextHolder] = message.useMessage();
-  const key = 'updatable';
-  const openMessage = (diapositivaName) => {
-   
-      if (!editable[diapositivaName]) {
-      messageApi.error('Primero debes editar la diapositiva');
-      return;
-    }
-  
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Cargando...',
-    });
-  
-    setEditable((prevState) => ({
-      ...prevState,
-      [diapositivaName]: !prevState[diapositivaName],
-    }));
-  
-    setTimeout(() => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Guardado!',
-        duration: 2,
-      });
-    }, 1000);
-  };
 
- const fechas = datosInforme.reduce(
+
+
+
+
+
+    const fechas = datosInforme.reduce(
       (result, obj) => {
         const fecha = obj.date;
     
@@ -380,7 +384,7 @@ function obtenerPalabraSinRepetirAtributos() {
     }
 
     const [defaultValues, setDefaultValues] =useState({
-      subtitulo:"Se mide el impacto de los eventos y la comparación con el periodo anterior",
+      subtitulo:"Se mide el impacto de los tweets y la comparación con el periodo anterior",
       dataAtributosComunicacion: [
         {
           emociones: (
@@ -530,8 +534,8 @@ function obtenerPalabraSinRepetirAtributos() {
         {
           title: (
             <div className="icon-nombre-columnas">
-              <img className="tw" src={ig} alt="logo"/>
-              INSTAGRAM
+              <img className="tw" src={tw} alt="logo"/>
+              TWITTER
             </div>
           ),
           dataIndex: "twitter",
@@ -1164,13 +1168,19 @@ function obtenerPalabraSinRepetirAtributos() {
         return { ...prevCambios, palabrasClaves: newHashtags };
       });
     };
+
+
+
+
+
+
  
     
 
 
     {/*CAMBIOS*/}
     const [cambios, setCambios] = useState({
-      subtitulo:"Se mide el impacto de los eventos y la comparación con el periodo anterior",
+      subtitulo:"Se mide el impacto de los tweets y la comparación con el periodo anterior",
       dataAtributosComunicacion: [
         {
           emociones: (
@@ -1320,8 +1330,8 @@ function obtenerPalabraSinRepetirAtributos() {
         {
           title: (
             <div className="icon-nombre-columnas">
-              <img className="tw" src={ig} alt="logo"/>
-              INSTAGRAM
+              <img className="tw" src={tw} alt="logo"/>
+              TWITTER
             </div>
           ),
           dataIndex: "twitter",
@@ -1399,7 +1409,7 @@ function obtenerPalabraSinRepetirAtributos() {
         { text: obtenerPalabraSinRepetir(), value: 30 },
         { text: obtenerPalabraSinRepetir(), value: 30 }
       ],
-     
+
      
       columnsEmociones: [
         {
@@ -1532,28 +1542,28 @@ function obtenerPalabraSinRepetirAtributos() {
       data: [
         {
           key: "1",
-          influenciador: "",
-          impresiones: "",
+          influenciador: "passalacquaok",
+          impresiones: 38691,
         },
         {
           key: "2",
-          influenciador: "",
-          impresiones: "",
+          influenciador: "PabbloZapata",
+          impresiones: 6292,
         },
         {
           key: "3",
-          influenciador: "",
-          impresiones: "",
+          influenciador: "noticiasen3ok",
+          impresiones: 3495,
         },
         {
           key: "4",
-          influenciador: "",
-          impresiones: "",
+          influenciador: "NHoughan",
+          impresiones: 65,
         },
         {
           key: "5",
-          influenciador: "",
-          impresiones: "",
+          influenciador: "alejavier68",
+          impresiones: 64,
         },
       ],
       data2ant:[
@@ -2372,54 +2382,29 @@ function obtenerPalabraSinRepetirAtributos() {
 }
 
 
+
 const principalesHashtagsData = contarMencionesPorHashtag(datosInforme).slice(0,10)
+// console.log(principalesHashtagsData)
+
+if(principalesHashtagsData.length > 0){
 
 
-
-
-if(principalesHashtagsData.length > 5 ){
 setCambios((prevCambios) => ({
   ...prevCambios,
 principalesHashtags: [
-  { text: principalesHashtagsData?.[0].Hashtags || {}, value: 80 },
-  { text: principalesHashtagsData?.[1].Hashtags || {}, value: 80 },
-  { text: principalesHashtagsData?.[2].Hashtags || {}, value: 80 },
-  { text: principalesHashtagsData?.[3].Hashtags || {}, value: 80 },
-  { text: principalesHashtagsData?.[4].Hashtags || {}, value: 80 },
-  // { text: principalesHashtagsData?.[5].Hashtags || {}, value: 80 },
-  // { text: principalesHashtagsData?.[6].Hashtags || {}, value: 80 },
-  // { text: principalesHashtagsData?.[7].Hashtags || {}, value: 80 },
-  // { text: principalesHashtagsData?.[8].Hashtags || {}, value: 80 },
-  // { text: principalesHashtagsData?.[9].Hashtags || {}, value: 80 },
+  { text: principalesHashtagsData?.[0].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[1].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[2].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[3].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[4].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[5].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[6].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[7].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[8].Hashtags || "", value: 80 },
+  { text: principalesHashtagsData?.[9].Hashtags || "", value: 80 },
 ], 
+}));
 }
-
-
-));
-} else if(principalesHashtagsData.length > 0 ){
-
-  setCambios((prevCambios) => ({
-    ...prevCambios,
-  principalesHashtags: [
-    { text: principalesHashtagsData?.[0].Hashtags || {}, value: 80 },], 
-  }
-  
-  
-  ));
-  
-} else {
-
-  setCambios((prevCambios) => ({
-    ...prevCambios,
-  principalesHashtags: [
-    { text: "", value: 80 },], 
-  }
-  
-  
-  ));
-
-}
-
 //////////////
 
 
@@ -2483,49 +2468,49 @@ setCambios((prevCambios) => ({
       influenciador: categorizadores?.[1].Autor || "",
       impresiones: categorizadores?.[1].totalInteracciones || "",
     },
-    // {
-    //   key: "3",
-    //   influenciador: categorizadores?.[2].Autor || "",
-    //   impresiones: categorizadores?.[2].totalInteracciones || "",
-    // },
-    // {
-    //   key: "4",
-    //   influenciador: categorizadores?.[3].Autor || "",
-    //   impresiones: categorizadores?.[3].totalInteracciones || "",
-    // },
-    // {
-    //   key: "5",
-    //   influenciador: categorizadores?.[4].Autor || "",
-    //   impresiones: categorizadores?.[4].totalInteracciones || "",
-    // },
+    {
+      key: "3",
+      influenciador: categorizadores?.[2].Autor || "",
+      impresiones: categorizadores?.[2].totalInteracciones || "",
+    },
+    {
+      key: "4",
+      influenciador: categorizadores?.[3].Autor || "",
+      impresiones: categorizadores?.[3].totalInteracciones || "",
+    },
+    {
+      key: "5",
+      influenciador: categorizadores?.[4].Autor || "",
+      impresiones: categorizadores?.[4].totalInteracciones || "",
+    },
   ],
-  // data2ant:[
-  //   {
-  //     key: "6",
-  //     influenciador: categorizadores?.[5].Autor || "",
-  //     impresiones: categorizadores?.[5].totalInteracciones || "",
-  //   },
-  //   {
-  //     key: "7",
-  //     influenciador: categorizadores?.[6].Autor || "",
-  //     impresiones: categorizadores?.[6].totalInteracciones || "",
-  //   },
-  //   {
-  //     key: "8",
-  //     influenciador: categorizadores?.[7].Autor || "",
-  //     impresiones: categorizadores?.[7].totalInteracciones || "",
-  //   },
-  //   {
-  //     key: "9",
-  //     influenciador: categorizadores?.[8].Autor || "",
-  //     impresiones: categorizadores?.[8].totalInteracciones || "", 
-  //   },
-  //   {
-  //     key: "10",
-  //     influenciador: categorizadores?.[9].Autor || "",
-  //     impresiones: categorizadores?.[9].totalInteracciones || "",
-  //   },
-  // ],
+  data2ant:[
+    {
+      key: "6",
+      influenciador: categorizadores?.[5].Autor || "",
+      impresiones: categorizadores?.[5].totalInteracciones || "",
+    },
+    {
+      key: "7",
+      influenciador: categorizadores?.[6].Autor || "",
+      impresiones: categorizadores?.[6].totalInteracciones || "",
+    },
+    {
+      key: "8",
+      influenciador: categorizadores?.[7].Autor || "",
+      impresiones: categorizadores?.[7].totalInteracciones || "",
+    },
+    {
+      key: "9",
+      influenciador: categorizadores?.[8].Autor || "",
+      impresiones: categorizadores?.[8].totalInteracciones || "", 
+    },
+    {
+      key: "10",
+      influenciador: categorizadores?.[9].Autor || "",
+      impresiones: categorizadores?.[9].totalInteracciones || "",
+    },
+  ],
 }));
   
 }
@@ -3239,139 +3224,157 @@ function obtenerPorcentajeCategoriaMayorAnterior() {
 
 
 
+
 if(propiedadesEncontradas.length > 0 && propiedadesEncontradas1.length >0){
-  let colorPalabras = tweetPredominante.type === "Negativo" ? "red" : "green"
-  // console.log("ERROR",propiedadesEncontradas[0])
-  const propiedades = Object.keys(textos.textos.sinonimos["emociones y sentimientos"]);
-  const arrayPropiedades = [];
-    propiedades.forEach(propiedad => {
-      arrayPropiedades.push(propiedad);
-    });
-    if (arrayPropiedades.includes(propiedadesEncontradas1[0])) {
-      // console.log("El elemento existe en arrayPropiedades.");
+let colorPalabras = tweetPredominante.type === "Negativo" ? "red" : "green"
+// console.log("ERROR",propiedadesEncontradas[0])
+const propiedades = Object.keys(textos.textos.sinonimos["emociones y sentimientos"]);
+const arrayPropiedades = [];
+  propiedades.forEach(propiedad => {
+    arrayPropiedades.push(propiedad);
+  });
+  if (arrayPropiedades.includes(propiedadesEncontradas1[0])) {
+    // console.log("El elemento existe en arrayPropiedades.");
+  } else {
+    // console.log("El elemento no existe en arrayPropiedades.");
+  }
+
+
+
+  function obtenerColor(palabraPrincipal) {
+    const atributosNegativos = [
+      "temor", "terror", "alarma", "susto", "desconfianza", "cobardía", "pánico", "fobia", "inseguridad", "espanto",
+      "asombro", "susto", "desconcierto", "confusión", "desorientación", "trastorno", "inquietud", "nerviosismo", "intranquilidad", "ansiedad",
+      "pena", "amargura", "desdicha", "nostalgia", "angustia", "depresión", "desaliento", "pesimismo", "pesadumbre", "aflicción",
+      "rechazo", "repulsión", "hostilidad", "odio", "oposición", "rencor", "rabia", "resentimiento", "distancia", "disconformidad",
+      "rabia", "enojo", "cólera", "furia", "indignación", "irritación", "exasperación", "malhumor", "odio", "disgusto",
+      "disgusto", "descontento", "fastidio", "enfado", "enojo", "incomodidad", "irritación", "molestia", "rechazo", "asco", "repugnancia", "repulsión",
+      "ira", "enfado", "irritación", "enojo", "cabreo", "rabia", "furia", "cólera", "disgusto", "exasperación",
+      "miedo", "temor", "timidez", "amilanamiento", "acobardamiento", "apocamiento", "pusilanamidad", "cortedad", "desconfianza", "pavor",
+      "descontento", "disgusto", "infelicidad", "desdicha", "desagrado", "inconformidad", "enfado", "malestar", "decepción",
+      "indiferencia", "apatía", "abandono", "desgano", "abulia", "dejadez", "hastío", "tedio", "desapego", "despreocupación",
+      "fragilidad", "cansancio", "decaimiento", "debilitamiento", "endeblez", "desnutrición", "desfallecimiento", "agotamiento", "flojedad", "desvanecimiento",
+      "inquietud", "excitación", "preocupación", "alarma", "desasosiego", "nerviosismo", "turbación", "angustia", "desazón", "tormento",
+      "desconfianza", "incertidumbre", "indecisión", "perplejidad", "titubeo", "vacilación", "problema", "cuestión", "reparo", "sospecha", "recelo", "suspicacia", "temor",
+      "irreligiosidad", "irreverencia", "incredulidad", "agnosticismo", "ateísmo", "inflexibilidad", "dureza", "crueldad", "maldad", "perversidad",
+      "rencor", "aversión", "aborrecimiento", "animadversión", "abominación", "antipatía", "tirria", "repulsión", "desprecio", "fobia", "saña", "rabia",
+      "animadversión", "animosidad", "aversión", "desagrado", "enemistad", "envidia", "hostilidad", "rencor", "repugnancia", "repulsión", "hincha", "manía", "odio", "resentimiento",
+      "desconsuelo", "mal", "pesar", "suplicio", "tortura", "aflicción", "angustia", "congoja", "daño", "pena", "tormento", "calvario",
+      "desafecto", "aversión", "tirria", "desafección", "repugnancia", "repulsión", "rencor", "desestimación", "aborrecimiento", "animosidad", "manía", "odio", "resentimiento",
+      "inactividad", "desocupación", "inercia", "apatía", "inoperancia", "inmovilidad", "estancamiento", "pasividad", "carencia", "flojedad",
+      "vulgaridad", "mezquindad", "deficiencia", "pobreza", "defectuosidad", "ordinario", "inferioridad", "trivialidad", "bizarro", "grosería",
+      "impasibilidad", "inconsciencia", "abulia", "apatía", "indolencia", "crueldad", "indiferencia", "letargo", "entumecimiento", "lejano",
+      "debilidad", "inconsistencia", "flojedad", "inseguridad", "endeblez", "precariedad", "vulnerabilidad", "inestabilidad", "agotamiento", "desfallecimiento",
+      "indecencia", "deshonestidad", "iniquidad", "injusticia", "corrupción", "perversidad", "sordidez", "impudicia", "insolencia", "falsedad",
+      "indiferencia", "desafecto", "desapego", "desinterés", "apatía", "impasibilidad", "aplomo", "inhumano", "insensibilidad", "desdén",
+      "ofensa", "agravio", "vejación", "atropello", "ofensa", "injuria", "humillación", "daño", "perjuicio", "ultraje",
+      "incapacidad", "insuficiencia", "ineptitud", "incompetencia", "necedad", "desconocimiento", "analfabetismo", "torpeza", "inepcia", "inhabilidad",
+      "vagancia", "pereza", "inactividad", "holgazaneria", "granduleria", "desidia", "apatía", "letargo", "indolencia", "haraganería",
+      "desmoralización", "desesperanza", "desilusión", "decepción", "desánimo", "tristeza", "fatalismo", "derrotismo", "desesperación", "apatía",
+      "impericia", "inhabilidad", "incompetencia", "ineptitud", "insuficiencia", "incapacidad", "ignorancia", "torpeza", "inutilidad", "incomprensión",
+      "ineficacia", "inoperancia", "incompetencia", "deficiencia", "insuficiencia", "fracaso", "incapacidad", "inacción", "inutilidad", "ineptitud",
+      "desconocido", "lejano", "antipático", "desprestigiado", "torpe", "odiado", "despreciado", "desagradable", "distante", "descomprometido",
+      "aislado", "apartado", "solitario", "separado", "retraído", "introvertido", "retirado", "inaccesible", "desconfiado", "encerrado",
+      "acatamiento", "obediencia", "dependencia", "servilismo", "supeditación", "rendimiento", "sometimiento", "subordinación",
+      "incongruencia", "inconsecuencia", "barbaridad", "anacronismo", "contradictorio", "absurdo", "ilógico", "desatinado", "delirante", "disparate",
+      "imprudente", "inconsciente", "insensato", "informal", "irreflexivo", "temerario", "negligente", "incumplidor", "inconstante", "indolente"
+    ];
+    
+  
+  
+    if (atributosNegativos.includes(palabraPrincipal.toLowerCase())) {
+      // Si está en la lista, asignar color rojo
+      return "red"; // Código de color rojo en formato hexadecimal
     } else {
-      // console.log("El elemento no existe en arrayPropiedades.");
+      // Si no está en la lista, asignar otro color o no hacer nada
+      return "green"; // Por defecto, se asigna el color negro (#000000) si no está en la lista
     }
-  
-  
-  
-    function obtenerColor(palabraPrincipal) {
-      const atributosNegativos = [
-        "temor", "terror", "alarma", "susto", "desconfianza", "cobardía", "pánico", "fobia", "inseguridad", "espanto",
-        "asombro", "susto", "desconcierto", "confusión", "desorientación", "trastorno", "inquietud", "nerviosismo", "intranquilidad", "ansiedad",
-        "pena", "amargura", "desdicha", "nostalgia", "angustia", "depresión", "desaliento", "pesimismo", "pesadumbre", "aflicción",
-        "rechazo", "repulsión", "hostilidad", "odio", "oposición", "rencor", "rabia", "resentimiento", "distancia", "disconformidad",
-        "rabia", "enojo", "cólera", "furia", "indignación", "irritación", "exasperación", "malhumor", "odio", "disgusto",
-        "disgusto", "descontento", "fastidio", "enfado", "enojo", "incomodidad", "irritación", "molestia", "rechazo", "asco", "repugnancia", "repulsión",
-        "ira", "enfado", "irritación", "enojo", "cabreo", "rabia", "furia", "cólera", "disgusto", "exasperación",
-        "miedo", "temor", "timidez", "amilanamiento", "acobardamiento", "apocamiento", "pusilanamidad", "cortedad", "desconfianza", "pavor",
-        "descontento", "disgusto", "infelicidad", "desdicha", "desagrado", "inconformidad", "enfado", "malestar", "decepción",
-        "indiferencia", "apatía", "abandono", "desgano", "abulia", "dejadez", "hastío", "tedio", "desapego", "despreocupación",
-        "fragilidad", "cansancio", "decaimiento", "debilitamiento", "endeblez", "desnutrición", "desfallecimiento", "agotamiento", "flojedad", "desvanecimiento",
-        "inquietud", "excitación", "preocupación", "alarma", "desasosiego", "nerviosismo", "turbación", "angustia", "desazón", "tormento",
-        "desconfianza", "incertidumbre", "indecisión", "perplejidad", "titubeo", "vacilación", "problema", "cuestión", "reparo", "sospecha", "recelo", "suspicacia", "temor",
-        "irreligiosidad", "irreverencia", "incredulidad", "agnosticismo", "ateísmo", "inflexibilidad", "dureza", "crueldad", "maldad", "perversidad",
-        "rencor", "aversión", "aborrecimiento", "animadversión", "abominación", "antipatía", "tirria", "repulsión", "desprecio", "fobia", "saña", "rabia",
-        "animadversión", "animosidad", "aversión", "desagrado", "enemistad", "envidia", "hostilidad", "rencor", "repugnancia", "repulsión", "hincha", "manía", "odio", "resentimiento",
-        "desconsuelo", "mal", "pesar", "suplicio", "tortura", "aflicción", "angustia", "congoja", "daño", "pena", "tormento", "calvario",
-        "desafecto", "aversión", "tirria", "desafección", "repugnancia", "repulsión", "rencor", "desestimación", "aborrecimiento", "animosidad", "manía", "odio", "resentimiento",
-        "inactividad", "desocupación", "inercia", "apatía", "inoperancia", "inmovilidad", "estancamiento", "pasividad", "carencia", "flojedad",
-        "vulgaridad", "mezquindad", "deficiencia", "pobreza", "defectuosidad", "ordinario", "inferioridad", "trivialidad", "bizarro", "grosería",
-        "impasibilidad", "inconsciencia", "abulia", "apatía", "indolencia", "crueldad", "indiferencia", "letargo", "entumecimiento", "lejano",
-        "debilidad", "inconsistencia", "flojedad", "inseguridad", "endeblez", "precariedad", "vulnerabilidad", "inestabilidad", "agotamiento", "desfallecimiento",
-        "indecencia", "deshonestidad", "iniquidad", "injusticia", "corrupción", "perversidad", "sordidez", "impudicia", "insolencia", "falsedad",
-        "indiferencia", "desafecto", "desapego", "desinterés", "apatía", "impasibilidad", "aplomo", "inhumano", "insensibilidad", "desdén",
-        "ofensa", "agravio", "vejación", "atropello", "ofensa", "injuria", "humillación", "daño", "perjuicio", "ultraje",
-        "incapacidad", "insuficiencia", "ineptitud", "incompetencia", "necedad", "desconocimiento", "analfabetismo", "torpeza", "inepcia", "inhabilidad",
-        "vagancia", "pereza", "inactividad", "holgazaneria", "granduleria", "desidia", "apatía", "letargo", "indolencia", "haraganería",
-        "desmoralización", "desesperanza", "desilusión", "decepción", "desánimo", "tristeza", "fatalismo", "derrotismo", "desesperación", "apatía",
-        "impericia", "inhabilidad", "incompetencia", "ineptitud", "insuficiencia", "incapacidad", "ignorancia", "torpeza", "inutilidad", "incomprensión",
-        "ineficacia", "inoperancia", "incompetencia", "deficiencia", "insuficiencia", "fracaso", "incapacidad", "inacción", "inutilidad", "ineptitud",
-        "desconocido", "lejano", "antipático", "desprestigiado", "torpe", "odiado", "despreciado", "desagradable", "distante", "descomprometido",
-        "aislado", "apartado", "solitario", "separado", "retraído", "introvertido", "retirado", "inaccesible", "desconfiado", "encerrado",
-        "acatamiento", "obediencia", "dependencia", "servilismo", "supeditación", "rendimiento", "sometimiento", "subordinación",
-        "incongruencia", "inconsecuencia", "barbaridad", "anacronismo", "contradictorio", "absurdo", "ilógico", "desatinado", "delirante", "disparate",
-        "imprudente", "inconsciente", "insensato", "informal", "irreflexivo", "temerario", "negligente", "incumplidor", "inconstante", "indolente"
-      ];
-      
-    
-    
-      if (atributosNegativos.includes(palabraPrincipal.toLowerCase())) {
-        // Si está en la lista, asignar color rojo
-        return "red"; // Código de color rojo en formato hexadecimal
-      } else {
-        // Si no está en la lista, asignar otro color o no hacer nada
-        return "green"; // Por defecto, se asigna el color negro (#000000) si no está en la lista
-      }
-    }
-  
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[0]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[0]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[0]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
-    obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
-  
-  setCambios((prevCambios) => ({
+  }
+
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[0]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[0]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[0]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[0]], palabrasSeleccionadas)  
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[1]], palabrasSeleccionadasAtributos) 
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[1]], palabrasSeleccionadas) 
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos)
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
+  obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas)
+
+setCambios((prevCambios) => ({
+...prevCambios,
+mapaPercepciones:[
+  { text: propiedadesEncontradas1?.[0] || "anticipación", value: 80, color: colorPalabras },
+    { text: propiedadesEncontradas1?.[1] || "insensibilidad", value: 50, color: colorPalabras },
+    { text: propiedadesEncontradas1?.[2] || "decisión", value: 30, color: colorPalabras },
+    { text: propiedadesEncontradas?.[0] || "valor", value: 80, color: colorPalabras },
+    { text: propiedadesEncontradas?.[1] || "mejora", value: 50, color: colorPalabras },
+    { text: propiedadesEncontradas?.[2] || "optimismo", value: 30, color: colorPalabras },
+  { text: palabrasSeleccionadasAtributos[0], value: 80, color:obtenerColor(palabrasSeleccionadasAtributos[0]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[1], value: 80, color:obtenerColor(palabrasSeleccionadasAtributos[1]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[2], value: 80, color:obtenerColor(palabrasSeleccionadasAtributos[2]).toLowerCase() },
+  { text: palabrasSeleccionadas[0], value: 80, color:obtenerColor(palabrasSeleccionadas[0]).toLowerCase() },
+  { text: palabrasSeleccionadas[1], value: 80, color:obtenerColor(palabrasSeleccionadas[1]).toLowerCase() },
+  { text: palabrasSeleccionadas[2], value: 80, color:obtenerColor(palabrasSeleccionadas[2]).toLowerCase() },
+  { text: palabrasSeleccionadas[3], value: 80, color:obtenerColor(palabrasSeleccionadas[3]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[3], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[3]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[4], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[4]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[5], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[5]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[6], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[6]).toLowerCase() },
+  { text: palabrasSeleccionadas[4], value: 50, color:obtenerColor(palabrasSeleccionadas[4]).toLowerCase() },
+  { text: palabrasSeleccionadas[5], value: 50, color:obtenerColor(palabrasSeleccionadas[5]).toLowerCase() },
+  { text: palabrasSeleccionadas[6], value: 50, color:obtenerColor(palabrasSeleccionadas[6]).toLowerCase() },
+  { text: palabrasSeleccionadas[7], value: 50, color:obtenerColor(palabrasSeleccionadas[7]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[7], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[7]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[8], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[8]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[9], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[9]).toLowerCase() },
+  { text: palabrasSeleccionadasAtributos[10], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[10]).toLowerCase() },
+  { text: palabrasSeleccionadas[8], value: 50, color:obtenerColor(palabrasSeleccionadas[8]).toLowerCase() },
+  { text: palabrasSeleccionadas[9], value: 50, color:obtenerColor(palabrasSeleccionadas[9]).toLowerCase() },
+  { text: palabrasSeleccionadas[10], value: 50, color:obtenerColor(palabrasSeleccionadas[10]).toLowerCase() },
+  { text: palabrasSeleccionadas[11], value: 50, color:obtenerColor(palabrasSeleccionadas[11]).toLowerCase() },
+  // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "aislado", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase() },
+  // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "Dicha", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase()},
+  // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "disgusto", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase()},
+  // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "regocijo", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase()},
+  // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "emoción", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
+  // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "Poder", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
+  // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "Debilidad", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
+  // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "Incapacidad", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
+],
+
+dataInner: [
+  { name: "Positivo", value: parseInt(datosPorcentaje[0].porcentaje.toFixed(0)), fill: "#53b253bd" },
+  { name: "Negativo", value: parseInt(datosPorcentaje[1].porcentaje.toFixed(0)), fill: "#ff4c4cd7"},
+  // Agrega aquí los demás objetos o actualiza los existentes según tus necesidades
+],
+dataOuter: [
+  { name: "Positivo", value: parseInt(datosPorcentajeAnterior[0].porcentaje.toFixed(0)), fill:"#53b253bd" },
+  { name: "Negativo", value: parseInt(datosPorcentajeAnterior[1].porcentaje.toFixed(0)), fill:"#ff4c4cd7"},
+  // Agrega aquí los demás objetos o actualiza los existentes según tus necesidades
+],
+}))
+}
+
+console.log(palabrasSeleccionadasAtributos[0].toLowerCase())
+
+setCambios((prevCambios) => ({
   ...prevCambios,
-  mapaPercepciones:[
-    { text: propiedadesEncontradas1?.[0] || "anticipación", value: 80, color: colorPalabras },
-      { text: propiedadesEncontradas1?.[1] || "insensibilidad", value: 50, color: colorPalabras },
-      { text: propiedadesEncontradas1?.[2] || "decisión", value: 30, color: colorPalabras },
-      { text: propiedadesEncontradas?.[0] || "valor", value: 80, color: colorPalabras },
-      { text: propiedadesEncontradas?.[1] || "mejora", value: 50, color: colorPalabras },
-      { text: propiedadesEncontradas?.[2] || "optimismo", value: 30, color: colorPalabras },
-    { text: palabrasSeleccionadasAtributos[0], value: 80, color:obtenerColor(palabrasSeleccionadasAtributos[0]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[1], value: 80, color:obtenerColor(palabrasSeleccionadasAtributos[1]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[2], value: 80, color:obtenerColor(palabrasSeleccionadasAtributos[2]).toLowerCase() },
-    { text: palabrasSeleccionadas[0], value: 80, color:obtenerColor(palabrasSeleccionadas[0]).toLowerCase() },
-    { text: palabrasSeleccionadas[1], value: 80, color:obtenerColor(palabrasSeleccionadas[1]).toLowerCase() },
-    { text: palabrasSeleccionadas[2], value: 80, color:obtenerColor(palabrasSeleccionadas[2]).toLowerCase() },
-    { text: palabrasSeleccionadas[3], value: 80, color:obtenerColor(palabrasSeleccionadas[3]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[3], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[3]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[4], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[4]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[5], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[5]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[6], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[6]).toLowerCase() },
-    { text: palabrasSeleccionadas[4], value: 50, color:obtenerColor(palabrasSeleccionadas[4]).toLowerCase() },
-    { text: palabrasSeleccionadas[5], value: 50, color:obtenerColor(palabrasSeleccionadas[5]).toLowerCase() },
-    { text: palabrasSeleccionadas[6], value: 50, color:obtenerColor(palabrasSeleccionadas[6]).toLowerCase() },
-    { text: palabrasSeleccionadas[7], value: 50, color:obtenerColor(palabrasSeleccionadas[7]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[7], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[7]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[8], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[8]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[9], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[9]).toLowerCase() },
-    { text: palabrasSeleccionadasAtributos[10], value: 50, color:obtenerColor(palabrasSeleccionadasAtributos[10]).toLowerCase() },
-    { text: palabrasSeleccionadas[8], value: 50, color:obtenerColor(palabrasSeleccionadas[8]).toLowerCase() },
-    { text: palabrasSeleccionadas[9], value: 50, color:obtenerColor(palabrasSeleccionadas[9]).toLowerCase() },
-    { text: palabrasSeleccionadas[10], value: 50, color:obtenerColor(palabrasSeleccionadas[10]).toLowerCase() },
-    { text: palabrasSeleccionadas[11], value: 50, color:obtenerColor(palabrasSeleccionadas[11]).toLowerCase() },
-    // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "aislado", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase() },
-    // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "Dicha", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase()},
-    // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "disgusto", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase()},
-    // { text: obtenerPalabraSinRepetirAtributos(textos.textos.sinonimos.atributos[propiedadesEncontradas1?.[2]], palabrasSeleccionadasAtributos) || "regocijo", value: 50, color:obtenerColor(propiedadesEncontradas1[2]).toLowerCase()},
-    // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "emoción", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
-    // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "Poder", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
-    // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "Debilidad", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
-    // { text: obtenerPalabraSinRepetir(textos.textos.sinonimos["emociones y sentimientos"][propiedadesEncontradas?.[2]], palabrasSeleccionadas) || "Incapacidad", value: 50, color:obtenerColor(propiedadesEncontradas[2]).toLowerCase() },
-  ],
-  
-  dataInner: [
+    dataInner: [
     { name: "Positivo", value: parseInt(datosPorcentaje[0].porcentaje.toFixed(0)), fill: "#53b253bd" },
     { name: "Negativo", value: parseInt(datosPorcentaje[1].porcentaje.toFixed(0)), fill: "#ff4c4cd7"},
     // Agrega aquí los demás objetos o actualiza los existentes según tus necesidades
@@ -3382,43 +3385,26 @@ if(propiedadesEncontradas.length > 0 && propiedadesEncontradas1.length >0){
     // Agrega aquí los demás objetos o actualiza los existentes según tus necesidades
   ],
   }))
-  }
-  
-  console.log(palabrasSeleccionadasAtributos[0].toLowerCase())
-  
-  setCambios((prevCambios) => ({
-    ...prevCambios,
-      dataInner: [
-      { name: "Positivo", value: parseInt(datosPorcentaje[0].porcentaje.toFixed(0)), fill: "#53b253bd" },
-      { name: "Negativo", value: parseInt(datosPorcentaje[1].porcentaje.toFixed(0)), fill: "#ff4c4cd7"},
-      // Agrega aquí los demás objetos o actualiza los existentes según tus necesidades
-    ],
-    dataOuter: [
-      { name: "Positivo", value: parseInt(datosPorcentajeAnterior[0].porcentaje.toFixed(0)), fill:"#53b253bd" },
-      { name: "Negativo", value: parseInt(datosPorcentajeAnterior[1].porcentaje.toFixed(0)), fill:"#ff4c4cd7"},
-      // Agrega aquí los demás objetos o actualiza los existentes según tus necesidades
-    ],
-    }))
-  
-  
-  
-  
-  },[datosInforme, datosInformeAnterior])
-  
-  // { text: "anticipación", value: 20, color:"#53b253bd" },
-  // { text: "decisión", value: 20, color:"#53b253bd" },
-  // { text: "mejora", value: 15, color:"#53b253bd" },
-  // { text: "optimismo", value: 12, color:"#53b253bd" },
-  // { text: "euforia", value: 25, color:"#53b253bd" },
-  // { text: "consciente", value: 45, color:"#53b253bd" },
-  // { text: "bienestar", value: 36, color:"#53b253bd" },
-  // { text: "eficiencia", value: 20, color:"#53b253bd" },
-  // { text: "experto", value: 57, color:"#53b253bd" },
-  // { text: "laboriosidad", value: 57, color:"#53b253bd" },
-  // { text: "conocimiento", value: 57, color:"#53b253bd" },
-  // { text: "educación", value: 57, color:"#53b253bd" },
-  // { text: "confianza", value: 21, color:"#53b253bd" },
-  
+
+
+
+
+},[datosInforme, datosInformeAnterior])
+
+// { text: "anticipación", value: 20, color:"#53b253bd" },
+// { text: "decisión", value: 20, color:"#53b253bd" },
+// { text: "mejora", value: 15, color:"#53b253bd" },
+// { text: "optimismo", value: 12, color:"#53b253bd" },
+// { text: "euforia", value: 25, color:"#53b253bd" },
+// { text: "consciente", value: 45, color:"#53b253bd" },
+// { text: "bienestar", value: 36, color:"#53b253bd" },
+// { text: "eficiencia", value: 20, color:"#53b253bd" },
+// { text: "experto", value: 57, color:"#53b253bd" },
+// { text: "laboriosidad", value: 57, color:"#53b253bd" },
+// { text: "conocimiento", value: 57, color:"#53b253bd" },
+// { text: "educación", value: 57, color:"#53b253bd" },
+// { text: "confianza", value: 21, color:"#53b253bd" },
+
 function sugerencias(){
 
   if(cambios.dataPreocupacionesTw[0]?.twitter?.props?.children?.[0]?.props?.children){
@@ -3477,18 +3463,19 @@ function sugerencias(){
 
 useEffect(()=>{
 
-  setCambios((prevCambios) => ({
-    ...prevCambios,
-    palabrasRecomendadas:[
-      { text: obtenerPalabraSinRepetir(), value: 30 },
-      { text: obtenerPalabraSinRepetir(), value: 30 },
-      { text: obtenerPalabraSinRepetir(), value: 30 },
-      { text: obtenerPalabraSinRepetir(), value: 30 },
-      { text: obtenerPalabraSinRepetir(), value: 30 },
-      { text: obtenerPalabraSinRepetir(), value: 30 }
-    ],
-  }));
-  },[])
+setCambios((prevCambios) => ({
+  ...prevCambios,
+  palabrasRecomendadas:[
+    { text: obtenerPalabraSinRepetir(), value: 30 },
+    { text: obtenerPalabraSinRepetir(), value: 30 },
+    { text: obtenerPalabraSinRepetir(), value: 30 },
+    { text: obtenerPalabraSinRepetir(), value: 30 },
+    { text: obtenerPalabraSinRepetir(), value: 30 },
+    { text: obtenerPalabraSinRepetir(), value: 30 }
+  ],
+}));
+},[])
+
 
 
 
@@ -3605,19 +3592,19 @@ useEffect(()=>{
                 
                 {/* <div className="img-red"><img className="fb" src={fb} alt="logo"></img> <Button onClick={()=>eliminarGrafico('displayTotalFacebook')} >x</Button></div> */}
                 {/* <div className="img-red"><img className="noticias" src={noticias} alt="logo"></img> <Button onClick={()=>eliminarGrafico('displayTotalMedios')}>x</Button></div>  */}
-             <div className="img-red"><img className="tw" src={ig} alt="logo"></img> <Button onClick={()=>eliminarGrafico('displayTotalTwitter')}>x</Button></div>
+             <div className="img-red"><img className="tw" src={tw} alt="logo"></img> <Button onClick={()=>eliminarGrafico('displayTotalTwitter')}>x</Button></div>
               </div>
               </Modal>
         
                 {/* <img className="fb" src={fb} alt="logo" style={{display:cambios.displayFacebookIcon}}></img> */}
                 {/* <img className="noticias" src={noticias} alt="logo" style={{display:cambios.displayMediosIcon}}></img> */}
-                 <img className="tw" src={ig} alt="logo" style={{display:cambios.displayTwitterIcon}}></img> 
+                 <img className="tw" src={tw} alt="logo" style={{display:cambios.displayTwitterIcon}}></img> 
           </> 
           :
           <>
          {/* <img className="fb" src={fb} alt="logo" style={{display:cambios.displayFacebookIcon}}></img> */}
                 {/* <img className="noticias" src={noticias} alt="logo" style={{display:cambios.displayMediosIcon}}></img> */}
-                <img className="tw" src={ig} alt="logo" style={{display:cambios.displayTwitterIcon}}></img>
+                <img className="tw" src={tw} alt="logo" style={{display:cambios.displayTwitterIcon}}></img>
           </>  }
          |
           <div className="titulo1">PERíODO</div>
@@ -3860,7 +3847,7 @@ useEffect(()=>{
                 Editar valores
               </Button>
               <Modal
-                title="Total - Volumen de publicaciones - Instagram"
+                title="Total - Volumen de publicaciones - Facebook"
                 open={modals.dataGraficoTw}
                 onOk={handleOk}
                 okText="Guardar"
@@ -3886,8 +3873,8 @@ useEffect(()=>{
               </Modal>
             </>
             <div className="icon-nombre">
-              <img className="tw" src={ig} alt="logo"/>
-              INSTAGRAM
+              <img className="tw" src={tw} alt="logo"/>
+              TWITTER
             </div>
             <div style={{display:'flex'}}>
             <ReactApexChart
@@ -3908,8 +3895,8 @@ useEffect(()=>{
           ) : (
             <div className="twitter-grafico-bar" style={{display:cambios.displayTotalTwitter}}>
             <div className="icon-nombre">
-              <img className="tw" src={ig} alt="logo"/>
-              INSTAGRAM
+              <img className="tw" src={tw} alt="logo"/>
+              TWITTER
             </div>
          
             <ReactApexChart
@@ -5150,7 +5137,7 @@ useEffect(()=>{
           
 
           <div >
-                <div>Instagram</div>
+                <div>Twitter</div>
           {cambios.dataPreocupacionesTw.map((objeto, indice) => (
                 <div key={indice} className="Influenciadores-modal">
                  
@@ -5553,7 +5540,7 @@ useEffect(()=>{
 
 
                  <div >
-                <div>Instagram</div>
+                <div>Twitter</div>
                 {cambios.dataEmocionesTw.map((objeto, indice) => (
                 <div key={indice} className="Influenciadores-modal">
                 
@@ -5898,7 +5885,7 @@ useEffect(()=>{
 
 
                 <div >
-                <div>Instagram</div>
+                <div>Twitter</div>
                 {cambios.dataImagenesTw.map((objeto, indice) => (
                 <div key={indice} className="Influenciadores-modal">
                 
