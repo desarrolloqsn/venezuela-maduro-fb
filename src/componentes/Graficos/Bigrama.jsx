@@ -11,18 +11,16 @@ import jsonFechas from './../../datos/rango_fechas.json'
 export default function NubePalabrasBigrama() {
   const [fechas, setFechas] = useState(jsonFechas.fechas);
   const [filtroFecha, setFiltroFecha] = useState(fechas[0]);
-  const series = Object.keys(dataNubeBi[filtroFecha]);
-  const [filtroSerie, setFiltroSerie] = useState(series[0]); // Estado para almacenar la serie seleccionada
-  const dataGrafico = dataNubeBi[filtroFecha][filtroSerie];
+  const dataFiltroFecha = dataNubeBi[filtroFecha];
+  const series = dataFiltroFecha ? Object.keys(dataFiltroFecha) : [];
+  const [filtroSerie, setFiltroSerie] = useState(series.length > 0 ? series[0] : ''); // Inicializamos filtroSerie con una cadena vacía si no hay series
+  const dataGrafico = dataNubeBi[filtroFecha] && dataNubeBi[filtroFecha][filtroSerie] ;
 
   useEffect(() => {
-    if (dataNubeBi[filtroFecha]) {
-      
-      setFiltroSerie(series[0]); // Establecer la primera serie como opción predeterminada
+    if (dataFiltroFecha) {
+      setFiltroSerie(series.length > 0 ? series[0] : ''); // Establecer la primera serie como opción predeterminada
     }
-  }, [filtroFecha]);
-
- 
+  }, [filtroFecha, dataFiltroFecha, series]);
 
   const opcionesFechas = fechas.map((fecha, index) => (
     <Select.Option key={index} value={fecha}>
@@ -30,11 +28,11 @@ export default function NubePalabrasBigrama() {
     </Select.Option>
   ));
 
-  const opcionesSeries = Object.keys(dataNubeBi[filtroFecha]).map((serie, index) => (
+  const opcionesSeries = dataNubeBi[filtroFecha] ? Object.keys(dataNubeBi[filtroFecha]).map((serie, index) => (
     <Select.Option key={index} value={serie}>
       {serie}
     </Select.Option>
-  ));
+  )) : [];
 
   const config = {
     data: dataGrafico,

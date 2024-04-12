@@ -173,7 +173,6 @@ const columns = [
           
           <div className='contendor-tweets'>
             {/* CONTENEDOR GENERAL */}
-            <div className='user-twitter'>{item.fecha}</div>    
             <br></br>
             <div className='foto-texto-perfil'>
               {/* CONTENEDOR foto y texto vertical */}
@@ -192,7 +191,8 @@ const columns = [
                   <div className='titulo-tweet'>{item.name}</div>
                   {/* Título */}
                   <div className='user-twitter'>@{item.usuarioOriginal}</div>
-                         
+                  <div className='user-twitter-fecha'>{item.fecha}</div>    
+
                   
                   </div>
                   {/* Mapeo de usuarios categorizadores */}

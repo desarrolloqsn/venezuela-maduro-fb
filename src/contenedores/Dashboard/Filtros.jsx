@@ -16,6 +16,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { TreeSelect } from 'antd';
 const { SHOW_PARENT } = TreeSelect;
 
+// Importa la extensión `isBetween`
 dayjs.extend(isBetween);
 
 dayjs.extend(customParseFormat);
@@ -63,6 +64,7 @@ export default function Filtros() {
       const formattedFechaInicio = formatDate(fechaInicio);
       const formattedFechaFin = formatDate(fechaFin);
     
+      // console.log(formattedFechaInicio, formattedFechaFin);
       setFiltros((prevFiltros) => ({
         ...prevFiltros,
         fechaInicio: formattedFechaInicio,
@@ -81,29 +83,29 @@ export default function Filtros() {
       maxDate = dates.reduce((max, date) => (date.isAfter(max) ? date : max));
     }
     
-
+    // console.log('Fecha mínima:', formatDate(minDate));
+    // console.log('Fecha máxima:', formatDate(maxDate));
     
-
     const categoriasModelos = [
-      {modelo: "Atributos", categorias: ["Autoridad","Capacidad","Cercanía","Coherencia","Deshonestidad","Dinamismo","Falta de Autoridad","Falta de Capacidad","Falta de cercanía","Falta de Responsabilidad","Falta de sensibilidad","Falta de Trayectoria","Honestidad","Incoherencia", "Inaccion", "Responsabilidad","Sensibilidad","Trayectoria" ]},
+      {modelo: "Atributos", categorias: ["Autoridad","Capacidad","Cercanía","Coherencia","Deshonestidad","Dinamismo","Falta de Autoridad","Falta de Capacidad","Falta de cercanía","Falta de Responsabilidad","Falta de sensibilidad","Falta de Trayectoria","Honestidad","Incoherencia","Interacción","Responsabilidad","Sensibilidad","Trayectoria" ]},
       {modelo: "Clima%20social", categorias:["Autoritarismo","Cambio","Calma","Continuidad","Democracia","Desorden","Despolitizacion","División","Estabilidad","Individualismo","Inestabilidad", "Injusticia","Irritación","Justicia","Orden", "Unidad","Pertenencia Social","Politizacion"]},
       { modelo: "Continuidad%20y%20cambio", categorias: ["Cambio", "Continuidad"] },
       {modelo: "Emociones%20B%C3%A1sicas%20(Plutchik)", categorias: ["Alegría", "Previsión", "Rechazo", "Confianza", "Ira", "Miedo", "Sorpresa", "Tristeza"] },
-      {modelo:"Preocupaciones", categorias: ["Ambiente","Actividad Economica", "Conflictividad", "Corrupción", "Derechos Humanos","Educación","Inflacion","Mercado Financiero", "Trabajo","Tránsito y Vialidad", "Salud","Seguridad", "Vivienda","Obra Pública"]},
-      {modelo: "Red%20motivacional%20del%20voto", categorias: ["Voto Blanco", "Voto Colectivo", "Voto Contextual", "Voto Clientelar","Voto de Plastico","Voto de Fe","Voto Experencial","Voto Circunstancial", "Voto Emocional", "Voto Ganador", "Voto Ideológico", "Voto Partidario", "Voto Plebiscitario", "Voto Racional", "Voto de Ira", "Voto del Miedo", "Voto por carisma", "Voto Útil"] },
+      {modelo:"Preocupaciones", categorias: ["Ambiente", "Conflictividad", "Corrupción", "Derechos Humanos","Educación", "Economía", "Trabajo","Tránsito y Vialidad", "Salud","Seguridad", "Vivienda","Obra Pública"]},
+      {modelo: "Red%20motivacional%20del%20voto", categorias: ["Voto Blanco", "Voto Clientelar", "Voto Emocional", "Voto Ganador", "Voto Ideológico", "Voto Partidario", "Voto Plebiscitario", "Voto Racional", "Voto de Ira", "Voto del Miedo", "Voto por carisma", "Voto Útil"] },
       {modelo:"Sentimientos", categorias: ["Agotamiento","Agrado","Amor","Alegría","Altivez","Apatía","Aversión","Calma","Certeza","Compasíon","Desagrado","Deseo","Dolor","Duda","Entusiasmo","Frustración","Humillacion","Odio","Placer","Satisfacción","Tensíon","Valor","Vigor"]},
         ];
     
-        const categoriasModelosSelector = [
-          {modelo: "Atributos", categorias: ["Autoridad","Capacidad","Cercanía","Coherencia","Deshonestidad","Dinamismo","Falta de Autoridad","Falta de Capacidad","Falta de cercanía","Falta de Responsabilidad","Falta de sensibilidad","Falta de Trayectoria","Honestidad","Incoherencia", "Inaccion", "Responsabilidad","Sensibilidad","Trayectoria" ]},
-          {modelo: "Clima social", categorias:["Autoritarismo","Cambio","Calma","Continuidad","Democracia","Desorden","Despolitizacion","División","Estabilidad","Individualismo","Inestabilidad", "Injusticia","Irritación","Justicia","Orden", "Unidad","Pertenencia Social","Politizacion"]},
-          { modelo: "Continuidad y cambio", categorias: ["Cambio", "Continuidad"] },
-          {modelo: "Emociones Basicas (Plutchik)", categorias: ["Alegría", "Previsión", "Rechazo", "Confianza", "Ira", "Miedo", "Sorpresa", "Tristeza"] },
-          {modelo:"Preocupaciones", categorias: ["Ambiente","Actividad Economica", "Conflictividad", "Corrupción", "Derechos Humanos","Educación","Inflacion","Mercado Financiero", "Trabajo","Tránsito y Vialidad", "Salud","Seguridad", "Vivienda","Obra Pública"]},
-          {modelo: "Red motivacional del voto", categorias: ["Voto Blanco", "Voto Colectivo", "Voto Contextual", "Voto Clientelar","Voto de Plastico","Voto de Fe","Voto Experencial","Voto Circunstancial", "Voto Emocional", "Voto Ganador", "Voto Ideológico", "Voto Partidario", "Voto Plebiscitario", "Voto Racional", "Voto de Ira", "Voto del Miedo", "Voto por carisma", "Voto Útil"] },
-          {modelo:"Sentimientos", categorias: ["Agotamiento","Agrado","Amor","Alegría","Altivez","Apatía","Aversión","Calma","Certeza","Compasíon","Desagrado","Deseo","Dolor","Duda","Entusiasmo","Frustración","Humillacion","Odio","Placer","Satisfacción","Tensíon","Valor","Vigor"]},
-          ];
-
+    const categoriasModelosSelector = [
+      {modelo: "Atributos", categorias: ["Autoridad","Capacidad","Cercanía","Coherencia","Deshonestidad","Dinamismo","Falta de Autoridad","Falta de Capacidad","Falta de cercanía","Falta de Responsabilidad","Falta de sensibilidad","Falta de Trayectoria","Honestidad","Incoherencia","Interacción","Responsabilidad","Sensibilidad","Trayectoria" ]},
+      {modelo: "Clima social", categorias:["Autoritarismo","Cambio","Calma","Continuidad","Democracia","Desorden","Despolitizacion","División","Estabilidad","Individualismo","Inestabilidad", "Injusticia","Irritación","Justicia","Orden", "Unidad","Pertenencia Social","Politizacion"]},
+      {modelo:"Continuidad y cambio", categorias: ["Cambio", "Continuidad"] },
+      {modelo:"Emociones Básicas (Plutchik)", categorias: ["Alegría", "Previsión", "Rechazo", "Confianza", "Ira", "Miedo", "Sorpresa", "Tristeza"] },
+      {modelo:"Preocupaciones", categorias: ["Ambiente", "Conflictividad", "Corrupción", "Derechos Humanos","Educación", "Economía", "Trabajo","Tránsito y Vialidad", "Salud","Seguridad", "Vivienda","Obra Pública"]},
+      {modelo: "Red motivacional del voto", categorias: ["Voto Blanco", "Voto Clientelar", "Voto Emocional","voto Ganador", "Voto Ideológico", "Voto Partidario", "Voto Plebiscitario", "Voto Racional", "Voto de Ira", "Voto del Miedo", "Voto por carisma", "Voto Útil"] },
+      {modelo:["Sentimientos"], categorias: ["Agotamiento","Agrado","Amor","Alegría","Altivez","Apatía","Aversión","Calma","Certeza","Compasíon","Desagrado","Deseo","Dolor","Duda","Entusiasmo","Frustración","Humillacion","Odio","Placer","Satisfacción","Tensíon","Valor","Vigor"]},
+      ];
+    // Función recursiva para construir el árbol
 function buildTree(data) {
   const tree = [];
 
@@ -135,18 +137,21 @@ function buildTree(data) {
   return tree;
 }
 
+// Generar el array treeData
 const treeData = buildTree(categoriasModelosSelector);
 
+// console.log(treeData);
 
     const dispatch = useDispatch();
 
+    // console.log("data", datos)
  
     const [filtroCumple, setFiltroCumple] = useState(null);
     const [filtros, setFiltros] = useState({
       serie: [],
       subserie: [],
       palabra: [],
-      sinpalabra: [], 
+      sinpalabra: [], // Agregar esta línea para inicializar la propiedad sinpalabra
       fechaInicio: formatDate(minDate),
       fechaFin: formatDate(maxDate),
       horaInicio: "00:00",
@@ -170,13 +175,19 @@ const treeData = buildTree(categoriasModelosSelector);
    
     const handleFiltrarEventos = (value) => {
       if (value.trim() === "") {
+        // El valor está vacío, puedes mostrar un mensaje de error o realizar alguna acción apropiada.
         return;
       }
     
+      // Obtener las palabras individuales del valor
       const palabras = value.split(" ");
     
+      // Eliminar palabras vacías y duplicadas
       const palabrasUnicas = [...new Set(palabras.filter(palabra => palabra !== ""))];
-
+    
+      // Realizar alguna acción con las palabras únicas
+      // console.log(palabrasUnicas);
+    
       if (filtroCumple === 'Eventos que cumplen') {
         setFiltros((prevFiltros) => ({
           ...prevFiltros,
@@ -217,21 +228,29 @@ const treeData = buildTree(categoriasModelosSelector);
    
     };
       
+        // Paso 1
       const seriesSet = new Set();
 
+      // Paso 2
       for (let i = 0; i < datos.length; i++) {
         const tweet = datos[i];
 
+        // Paso 3
         if (tweet.seriesName !== "") {
+          // Paso 4
           seriesSet.add(tweet.seriesName);
         }
       }
 
+      // Paso 5
       const seriesArray = Array.from(seriesSet);
+      // console.log(seriesArray);
         
 
+    // Paso 1: Crear un conjunto para las subseries únicas
       const subSeriesSet = new Set();
 
+      // Paso 2: Recorrer los datos y agregar las subseries al conjunto
       for (let i = 0; i < datos.length; i++) {
         const tweet = datos[i];
         const subSeries = tweet.subSeriesName;
@@ -243,9 +262,15 @@ const treeData = buildTree(categoriasModelosSelector);
         }
       }
 
+      // Paso 3: Convertir el conjunto en un array de subseries
       const subSeriesArray = Array.from(subSeriesSet);
 
+      // Paso 4: Mostrar el array de subseries únicas
+      // console.log(subSeriesArray);
+
+
       const handleSeriesChange = (serieDato) => {
+        // console.log(serie)
         setFiltros((prevFiltros) => ({
           ...prevFiltros,
           serie: serieDato,
@@ -275,6 +300,12 @@ const treeData = buildTree(categoriasModelosSelector);
               -
             </Button>
             </Tooltip>
+            {/* <Select placeholder="Categoria" className="selectores-dash-eventos" allowClear>
+              <Select.Option value="Texto" allowClear>Texto</Select.Option>
+              <Select.Option value="Autores" allowClear>Autores</Select.Option>
+              <Select.Option value="Hashtags" allowClear>Hashtags</Select.Option>
+              <Select.Option value="Menciones" allowClear>Menciones</Select.Option>
+            </Select> */}
            <Input placeholder="Texto/Autor/Hashtag/Mención" allowClear onBlur={(e) => handleFiltrarEventos(e.target.value)}></Input>
           </div>
         ));
@@ -335,6 +366,17 @@ const treeData = buildTree(categoriasModelosSelector);
         return numero < 10 ? `0${numero}` : numero;
       }
       
+      
+   
+    
+    
+
+
+      
+
+    
+
+
       const handleHoraChange = (times) => {
        
         if(times){
@@ -381,7 +423,6 @@ const modeloEncontrado = categoriasModelos.find(item => item.modelo === subUrl);
 // Obtener la lista de categorías del modelo
 const categorias = modeloEncontrado ? modeloEncontrado.categorias : [];
 
-// console.log ('categorias', categorias)
 
 
 const selectProps = {
@@ -481,8 +522,10 @@ const disabledDate = current => {
       anidados: filtros.anidados,
       datos: filtros.datos
       }
+      // console.log(valores)
       dispatch(filtrarDatos(valores));
     }
+    // console.log(filtros.palabra)
     dispatch(filtrarDatos(filtros));
     setFiltros(prevFiltros => ({
       ...prevFiltros,
@@ -491,9 +534,11 @@ const disabledDate = current => {
     }));
   
   }
+
+
   return (
     <div>
-    <div className='nombreDashboard'> Dashboard- Nicolas Maduro - FB {modeloSinEspacios ? `- ${modeloSinEspacios}` : null}</div>
+    <div className='nombreDashboard'>Francisco Olvera - FB {modeloSinEspacios ? `- ${modeloSinEspacios}` : null}</div>
     <div className='contenedor-filtros'>
      <div className='boton-informe'>
      <Tooltip placement="top" title='Generar informe' >
@@ -511,7 +556,7 @@ const disabledDate = current => {
         onChange={handleFechaChange}
         defaultValue={[dayjs(initialValues[0], dateFormat), dayjs(initialValues[1], dateFormat)]}
         format={dateFormat}
-        disabledDate={disabledDate}
+        disabledDate={disabledDate}  // Propiedad para deshabilitar fechas específicas
         className="selectores-dash-eventos"
       />
       <div className='filtro-texto-hora'>
@@ -522,6 +567,7 @@ const disabledDate = current => {
         format='HH:mm'
         allowClear={true}
         onChange={handleHoraChange}
+        // defaultValue={initialValuesHora}
       className="selectores-dash-hora"
         
       />
@@ -536,7 +582,7 @@ const disabledDate = current => {
       <Select
         placeholder="Serie"
         onChange={handleSeriesChange}
-        allowClear 
+        allowClear // Habilitar la funcionalidad de borrado
         {...selectPropsSerie}
         className="selectores-dash-eventos"
       >
@@ -553,7 +599,7 @@ const disabledDate = current => {
         placeholder="Subserie"
         className="selectores-dash-eventos"
         onChange={handleSubSeriesChange}
-        allowClear 
+        allowClear // Habilitar la funcionalidad de borrado
         disabled={subSeriesArray.length === 0}
         {...selectPropsSub}
       >
@@ -605,6 +651,7 @@ const disabledDate = current => {
     : <TreeSelect {...tProps} /> }
 
 
+
 </div>
 
 
@@ -627,6 +674,8 @@ const disabledDate = current => {
      </div> 
 
      
+
+   
      {renderCode()} 
     <Checkbox onChange={onChangeCheck}>Añadir filtro con datos anidados</Checkbox>
     <Button type='primary' onClick={sendFilter} className='subtitulo-boton'>Filtrar</Button>

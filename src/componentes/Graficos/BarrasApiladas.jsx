@@ -11,16 +11,11 @@ import { Button, Tooltip } from 'antd';
 export default function GraficoArreglado() {
   const [dataTweets, setData] = useState([]);
   const datos = useSelector(state => state.datosFiltrados);
-  const filtroModelo = useSelector (state => state.filtros)
 
   useEffect(() => {
     const formattedData = organizeTweetsByDayAndAttributes(datos);
-    // const modeloFiltrado = filtroModelo ? formattedData.filter(item => item.modelo === filtroModelo) :formattedData;
-    // console.log('ModeloFiltrado', modeloFiltrado)
-    // console.log('formattedData', formattedData.filter)
-    // setData(modeloFiltrado);
-    setData(formattedData)
-  }, [datos, filtroModelo]);
+    setData(formattedData);
+  }, [datos]);
 
   function organizeTweetsByDayAndAttributes(data) {
     // Objeto para almacenar los tweets por día
@@ -36,7 +31,7 @@ export default function GraficoArreglado() {
     });
 
     // Objeto para almacenar los atributos y sus valores
-    const attributes = [
+    let attributes = [
       'Atributos',
       'Clima Social',
       'Continuidad y cambio',
@@ -44,10 +39,9 @@ export default function GraficoArreglado() {
       'Preocupaciones',
       'Red motivacional del voto',
       'Sentimientos',
-      'Voto Emocional y Racional'
+      'Voto Emocional y Racional',
+
     ];
-
-
     // Objeto para almacenar los contadores de atributos por día
     const attributeCountsByDay = {};
 

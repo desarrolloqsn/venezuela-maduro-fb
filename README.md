@@ -1,4 +1,4 @@
-### Dashboard Analisis Facebook Repositorio
+#### usuario: qsnfolvera
+#### pass: qsnfolvera2024
 
-##### usuario: qsnanalisis
-##### pass: qsnanalisis2024
+#### este repositorio no contiene grafos 

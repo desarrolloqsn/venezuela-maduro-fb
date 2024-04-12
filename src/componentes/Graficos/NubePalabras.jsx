@@ -11,19 +11,17 @@ import jsonFechas from './../../datos/rango_fechas.json'
 
 export default function NubePalabras() {
   const [fechas, setFechas] = useState(jsonFechas.fechas);
-  const [filtroFecha, setFiltroFecha] = useState(fechas[0]);
-  const series = Object.keys(dataNube[filtroFecha]);
-  const [filtroSerie, setFiltroSerie] = useState(series[0]); // Estado para almacenar la serie seleccionada
-  const dataGrafico = dataNube[filtroFecha][filtroSerie];
+  const [filtroFecha, setFiltroFecha] = useState(fechas[0] || null);
+  const series = dataNube[filtroFecha] ? Object.keys(dataNube[filtroFecha]) : [];
+  const [filtroSerie, setFiltroSerie] = useState(series[0] || null);
+  const dataGrafico = dataNube[filtroFecha] && dataNube[filtroFecha][filtroSerie] ? dataNube[filtroFecha][filtroSerie] : null;
 
+  
   useEffect(() => {
     if (dataNube[filtroFecha]) {
-      
-      setFiltroSerie(series[0]); // Establecer la primera serie como opción predeterminada
+      setFiltroSerie(series[0]);
     }
-  }, [filtroFecha]);
-
- 
+  }, [filtroFecha, series]);
 
   const opcionesFechas = fechas.map((fecha, index) => (
     <Select.Option key={index} value={fecha}>
@@ -31,12 +29,12 @@ export default function NubePalabras() {
     </Select.Option>
   ));
 
-  const opcionesSeries = Object.keys(dataNube[filtroFecha]).map((serie, index) => (
+  const opcionesSeries = series.map((serie, index) => (
     <Select.Option key={index} value={serie}>
       {serie}
     </Select.Option>
   ));
-
+  
   const config = {
     data: dataGrafico,
     wordField: 'palabra',
