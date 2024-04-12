@@ -14,7 +14,7 @@ export default function NubePalabrasBigrama() {
   const dataFiltroFecha = dataNubeBi[filtroFecha];
   const series = dataFiltroFecha ? Object.keys(dataFiltroFecha) : [];
   const [filtroSerie, setFiltroSerie] = useState(series.length > 0 ? series[0] : ''); 
-  const dataGrafico = dataNubeBi[filtroFecha][filtroSerie];
+  const dataGrafico = dataNubeBi[filtroFecha] && dataNubeBi[filtroFecha][filtroSerie];
 
   useEffect(() => {
     if (dataFiltroFecha) {

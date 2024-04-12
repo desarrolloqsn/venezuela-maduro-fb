@@ -14,7 +14,7 @@ export default function NubePalabrasTrigrama() {
   const dataFiltroFecha = dataNube[filtroFecha];
   const series = dataFiltroFecha ? Object.keys(dataFiltroFecha) : [];
   const [filtroSerie, setFiltroSerie] = useState(series.length > 0 ? series[0] : ''); 
-  const dataGrafico = dataNube[filtroFecha][filtroSerie];
+  const dataGrafico = dataNube[filtroFecha] && dataNube[filtroFecha][filtroSerie];
 
   useEffect(() => {
     if (dataFiltroFecha) {
@@ -28,12 +28,11 @@ export default function NubePalabrasTrigrama() {
     </Select.Option>
   ));
 
-  const opcionesSeries = dataNube[filtroFecha] ? Object.keys(dataNube[filtroFecha]).map((serie, index) => (
+  const opcionesSeries = dataNube[filtroFecha] && typeof dataNube[filtroFecha] === 'object' ? Object.keys(dataNube[filtroFecha]).map((serie, index) => (
     <Select.Option key={index} value={serie}>
       {serie}
     </Select.Option>
   )) : [];
-
   const config = {
     data: dataGrafico,
     wordField: 'palabra',
