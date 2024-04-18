@@ -19,7 +19,7 @@ export default function NubePalabras() {
 
   useEffect(() => {
     if (dataFiltroFecha) {
-      setFiltroSerie(series.length > 0 ? series[0] : ''); // Establecer la primera serie como opción predeterminada
+      setFiltroSerie(series.length > 0 ? series[0] : ''); 
     }
   }, [filtroFecha, dataFiltroFecha, series]);
  
