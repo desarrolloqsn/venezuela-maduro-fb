@@ -14,7 +14,7 @@ export default function NubePalabras() {
   const [filtroFecha, setFiltroFecha] = useState(fechas[0]);
   const dataFiltroFecha = dataNube[filtroFecha];
   const series = dataFiltroFecha ? Object.keys(dataFiltroFecha) : [];
-  const [filtroSerie, setFiltroSerie] = useState(series.length > 0 ? series[0] : ''); // Inicializamos filtroSerie con una cadena vacía si no hay series
+  const [filtroSerie, setFiltroSerie] = useState(series.length > 0 ? series[0] : ''); 
   const dataGrafico = dataNube[filtroFecha] && dataNube[filtroFecha][filtroSerie];
 
   useEffect(() => {
